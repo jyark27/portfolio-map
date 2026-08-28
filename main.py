@@ -11,6 +11,7 @@ from pydantic import BaseModel, EmailStr
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
 import json
+import os
 from pathlib import Path
 import bcrypt
 import mimetypes
@@ -44,10 +45,22 @@ async def serve_mindmap():
     return FileResponse(BASE_DIR / "mindmap.html", headers={"Cache-Control": "no-store"})
 
 # ==========================================
-# 2. SQLite 데이터베이스 설정
+# 2. 데이터베이스 설정
 # ==========================================
-SQLALCHEMY_DATABASE_URL = "sqlite:///./portfolio.db"
-engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+LOCAL_DATABASE_URL = f"sqlite:///{(BASE_DIR / 'portfolio.db').as_posix()}"
+SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", LOCAL_DATABASE_URL)
+
+# Render Postgres의 기본 연결 문자열(postgresql://)을 psycopg 드라이버 형식으로 변환합니다.
+if SQLALCHEMY_DATABASE_URL.startswith("postgres://"):
+    SQLALCHEMY_DATABASE_URL = SQLALCHEMY_DATABASE_URL.replace("postgres://", "postgresql+psycopg://", 1)
+elif SQLALCHEMY_DATABASE_URL.startswith("postgresql://"):
+    SQLALCHEMY_DATABASE_URL = SQLALCHEMY_DATABASE_URL.replace("postgresql://", "postgresql+psycopg://", 1)
+
+engine_options = {"pool_pre_ping": True}
+if SQLALCHEMY_DATABASE_URL.startswith("sqlite"):
+    engine_options["connect_args"] = {"check_same_thread": False}
+
+engine = create_engine(SQLALCHEMY_DATABASE_URL, **engine_options)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
@@ -80,9 +93,9 @@ def get_db():
 # ==========================================
 # 3. 보안 및 JWT 토큰 설정
 # ==========================================
-SECRET_KEY = "super-secret-key-for-portfolio-maker" # 실제 서비스 시 복잡한 문자열로 변경
+SECRET_KEY = os.getenv("SECRET_KEY", "local-development-only-change-this-secret")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "60"))
 
 # 프론트엔드에서 로그인 데이터를 보낼 엔드포인트 지정
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
