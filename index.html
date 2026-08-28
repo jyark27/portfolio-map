@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>portfolio-map</title>
+    <style>
+        @font-face {
+            font-family: 'Pretendard';
+            src: url('/fonts/PretendardVariable.woff2') format('woff2');
+            font-weight: 45 920;
+            font-style: normal;
+            font-display: swap;
+        }
+        /* ================= 화이트 테마 CSS ================= */
+        :root {
+            --bg-color: #F4F6F9;
+            --card-bg: #ffffff;
+            --text-main: #1A365D;
+            --text-muted: #718096;
+            --primary-color: #3182CE;
+            --primary-hover: #2b6cb0;
+            --border-color: #e2e8f0;
+        }
+
+        body { 
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+        }
+
+        /* 상단 네비게이션 바 */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background-color: var(--card-bg);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .navbar .logo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .nav-buttons button {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            margin-left: 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-buttons button:hover {
+            background: var(--bg-color);
+        }
+
+        .nav-buttons button.primary-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+        }
+
+        .nav-buttons button.primary-btn:hover {
+            background: var(--primary-hover);
+        }
+
+        /* 메인 컨텐츠 영역 (카드 UI) */
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        h2 { margin-top: 0; color: var(--text-main); }
+        .text-muted { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; }
+
+        /* 입력 폼 디자인 */
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; }
+        input, textarea { 
+            width: 100%; 
+            padding: 12px; 
+            box-sizing: border-box; 
+            border: 1px solid var(--border-color); 
+            border-radius: 6px; 
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+        input:focus, textarea:focus { outline: none; border-color: var(--primary-color); }
+        
+        .submit-btn { 
+            width: 100%; 
+            padding: 14px; 
+            background-color: var(--primary-color); 
+            color: white; 
+            border: none; 
+            border-radius: 6px; 
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer; 
+            margin-top: 10px; 
+            transition: background 0.2s;
+        }
+        .submit-btn:hover { background-color: var(--primary-hover); }
+
+        .secondary-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 12px;
+            background: white;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .theme-switch { background: transparent; color: var(--text-main); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 6px; font-weight: 700; cursor: pointer; }
+        body.dark { --bg-color: #121212; --card-bg: #1d1d1d; --text-main: #E0E0E0; --text-muted: #b5b5b5; --primary-color: #BB86FC; --primary-hover: #9b61e5; --border-color: #3c3c3c; }
+        body.dark #result { background: #242424; }
+        body.dark .secondary-btn { background: #1d1d1d; color: #03DAC6; border-color: #03DAC6; }
+        body.dark .card { border: 1px solid #BB86FC; box-shadow: 0 4px 20px #00000055, 0 0 0 1px #BB86FC22; }
+        body.dark .project-card { background: #242424; border-color: #03DAC6; }
+        body.dark input, body.dark textarea { background: #242424; color: #E0E0E0; border-color: #03DAC6; }
+        body.dark .add-project { background: #1d1d1d; border-color: #BB86FC; color: #BB86FC; }
+        .secondary-btn:hover { background: #ebf8ff; }
+
+        .project-card { padding: 18px; margin-bottom: 12px; border: 1px solid var(--border-color); border-radius: 8px; background: #f8fbff; }
+        .project-card input { margin-bottom: 10px; }
+        .project-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; font-weight: 700; }
+        .remove-project { border: 0; background: transparent; color: #e53e3e; cursor: pointer; font-weight: 700; }
+        .add-project { width: 100%; padding: 11px; border: 1px dashed var(--primary-color); border-radius: 6px; background: #ebf8ff; color: var(--primary-color); font-weight: 700; cursor: pointer; }
+
+        #result { margin-top: 30px; padding: 25px; background-color: var(--bg-color); border-radius: 8px; display: none; }
+        
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a class="logo" href="/">포트폴리오 맵</a>
+        <button id="theme-switch" class="theme-switch" type="button" onclick="toggleTheme()"></button>
+        
+        <div class="nav-buttons" id="nav-guest">
+            <button onclick="showView('login-box')">로그인</button>
+            <button class="primary-btn" onclick="showView('signup-box')">회원가입</button>
+        </div>
+
+        <div class="nav-buttons hidden" id="nav-user">
+            <button onclick="showView('app-section')">마이페이지</button>
+            <button class="primary-btn" onclick="openMindMap()">마인드맵</button>
+            <button onclick="logout()">로그아웃</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        
+        <form id="login-box" class="card" onsubmit="login(event)">
+            <h2>로그인</h2>
+            <p class="text-muted">포트폴리오를 관리하려면 로그인하세요.</p>
+            <div class="form-group">
+                <label>이메일</label>
+                <input type="email" id="login-email" placeholder="example@email.com">
+            </div>
+            <div class="form-group">
+                <label>비밀번호</label>
+                <input type="password" id="login-password" placeholder="비밀번호 입력">
+            </div>
+            <button type="submit" class="submit-btn">로그인</button>
+        </form>
+
+        <form id="signup-box" class="card hidden" onsubmit="signup(event)">
+            <h2>회원가입</h2>
+            <p class="text-muted">새로운 계정을 만들어보세요.</p>
+            <div class="form-group">
+                <label>이메일</label>
+                <input type="email" id="signup-email" placeholder="example@email.com">
+            </div>
+            <div class="form-group">
+                <label>이름</label>
+                <input type="text" id="signup-name" placeholder="홍길동">
+            </div>
+            <div class="form-group">
+                <label>비밀번호</label>
+                <input type="password" id="signup-password" placeholder="비밀번호 입력">
+            </div>
+            <button type="submit" class="submit-btn">계정 생성</button>
+        </form>
+
+        <div id="app-section" class="card hidden">
+            <h2>포트폴리오 편집</h2>
+            <p class="text-muted">언제든 내용을 수정한 뒤 다시 저장할 수 있습니다.</p>
+            
+            <div class="form-group">
+                <label>이름</label>
+                <input type="text" id="name" placeholder="홍길동">
+            </div>
+            <div class="form-group">
+                <label>지원 포지션</label>
+                <input type="text" id="position" placeholder="프론트엔드 개발자">
+            </div>
+            <div class="form-group">
+                <label>보유 기술 (쉼표로 구분)</label>
+                <input type="text" id="skills" placeholder="HTML, CSS, JavaScript, React">
+            </div>
+            <div class="form-group">
+                <label>프로젝트 및 경력</label>
+                <div id="project-list"></div>
+                <button class="add-project" type="button" onclick="addProject()">＋ 프로젝트 추가</button>
+            </div>
+            <button class="submit-btn" onclick="submitPortfolio()">저장 및 생성하기</button>
+            <button class="secondary-btn" type="button" onclick="openMindMap()">마인드맵 화면 열기</button>
+
+            <div id="result">
+                <h2 id="res-title"></h2>
+                <p id="res-intro"></p>
+                <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+                <h3 style="font-size: 1.1rem; color: #2b6cb0;">기술 스택</h3>
+                <ul id="res-skills"></ul>
+                <h3 style="font-size: 1.1rem; color: #2b6cb0; margin-top: 20px;">경력 상세</h3>
+                <p id="res-details" style="line-height: 1.6;"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "http://127.0.0.1:8000";
+
+        function applyTheme() {
+            const isDark = localStorage.getItem('portfolio-theme') === 'dark';
+            document.body.classList.toggle('dark', isDark);
+            document.getElementById('theme-switch').textContent = isDark ? '☀ 화이트' : '◐ 다크';
+        }
+        function toggleTheme() {
+            localStorage.setItem('portfolio-theme', document.body.classList.contains('dark') ? 'light' : 'dark');
+            applyTheme();
+        }
+        applyTheme();
+
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        // 화면 켜질 때 로그인 상태 확인
+        window.onload = () => {
+            const token = localStorage.getItem("access_token");
+            if (token) {
+                setLoggedInState();
+            } else {
+                showView('login-box');
+            }
+        };
+
+        // 화면 전환 함수 (로그인창, 회원가입창, 앱화면 중 하나만 표시)
+        function showView(viewId) {
+            document.getElementById('login-box').classList.add('hidden');
+            document.getElementById('signup-box').classList.add('hidden');
+            document.getElementById('app-section').classList.add('hidden');
+            
+            document.getElementById(viewId).classList.remove('hidden');
+        }
+
+        // 로그인 성공 시 UI 변경
+        function setLoggedInState() {
+            document.getElementById('nav-guest').classList.add('hidden');
+            document.getElementById('nav-user').classList.remove('hidden');
+            showView('app-section');
+            renderProjects([]);
+            loadSavedPortfolio();
+        }
+
+        async function loadSavedPortfolio() {
+            const token = localStorage.getItem("access_token");
+            if (!token) return;
+
+            const response = await fetch(`${API_URL}/api/portfolio/latest`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (!response.ok) return;
+            const portfolio = await response.json();
+            document.getElementById('name').value = portfolio.name || '';
+            document.getElementById('position').value = portfolio.position || '';
+            document.getElementById('skills').value = (portfolio.tech_stack || []).join(', ');
+            renderProjects(portfolio.projects || (portfolio.details ? [{ title: '경력 및 프로젝트', description: portfolio.details }] : []));
+        }
+
+        function addProject(project = { title: '', description: '' }) {
+            const list = document.getElementById('project-list');
+            const card = document.createElement('div');
+            card.className = 'project-card';
+            card.innerHTML = `
+                <div class="project-head"><span>프로젝트</span><button class="remove-project" type="button">삭제</button></div>
+                <input class="project-title" type="text" placeholder="프로젝트 제목" value="${escapeHtml(project.title || '')}">
+                <textarea class="project-description" rows="4" placeholder="프로젝트 내용과 역할, 성과를 입력하세요.">${escapeHtml(project.description || '')}</textarea>`;
+            card.querySelector('.remove-project').onclick = () => card.remove();
+            list.appendChild(card);
+        }
+
+        function renderProjects(projects) {
+            document.getElementById('project-list').innerHTML = '';
+            (projects.length ? projects : [{ title: '', description: '' }]).forEach(addProject);
+        }
+
+        function getProjects() {
+            return [...document.querySelectorAll('.project-card')]
+                .map(card => ({ title: card.querySelector('.project-title').value.trim(), description: card.querySelector('.project-description').value.trim() }))
+                .filter(project => project.title || project.description);
+        }
+
+        function escapeHtml(value) {
+            return String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        function openMindMap() {
+            window.open(`/mindmap?updated=${Date.now()}`, 'portfolioMindMap');
+        }
+
+        // 로그아웃 시 UI 변경
+        function logout() {
+            localStorage.removeItem("access_token");
+            document.getElementById('nav-user').classList.add('hidden');
+            document.getElementById('nav-guest').classList.remove('hidden');
+            document.getElementById('result').classList.add('hidden');
+            showView('login-box');
+        }
+
+        // 1. 회원가입 API
+        async function signup(event) {
+            event.preventDefault();
+            const email = document.getElementById('signup-email').value.trim();
+            const name = document.getElementById('signup-name').value;
+            const password = document.getElementById('signup-password').value;
+
+            if (!isValidEmail(email)) {
+                alert("올바른 이메일 형식이 아닙니다.");
+                document.getElementById('signup-email').focus();
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/signup`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, name, password })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    alert("회원가입 완료! 로그인 해주세요.");
+                    document.getElementById('login-email').value = email;
+                    showView('login-box');
+                } else {
+                    alert("회원가입 실패: " + data.detail);
+                }
+            } catch (error) {
+                alert("서버에 연결할 수 없습니다. 서버가 실행 중인지 확인해주세요.");
+            }
+        }
+
+        // 2. 로그인 API
+        async function login(event) {
+            event.preventDefault();
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+
+            if (!isValidEmail(email)) {
+                alert("올바른 이메일 형식이 아닙니다.");
+                document.getElementById('login-email').focus();
+                return;
+            }
+
+            const formData = new URLSearchParams();
+            formData.append("username", email);
+            formData.append("password", password);
+
+            const response = await fetch(`${API_URL}/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: formData.toString()
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                localStorage.setItem("access_token", data.access_token);
+                window.location.href = '/';
+            } else if (response.status === 404) {
+                alert("등록된 계정이 없습니다. 회원가입 화면으로 이동합니다.");
+                document.getElementById('signup-email').value = email;
+                showView('signup-box');
+                document.getElementById('signup-name').focus();
+            } else {
+                alert("로그인 실패: " + data.detail);
+            }
+        }
+
+        // 3. 포트폴리오 생성 및 저장 API
+        async function submitPortfolio() {
+            const token = localStorage.getItem("access_token");
+            if (!token) {
+                alert("로그인이 필요합니다.");
+                logout();
+                return;
+            }
+
+            const payload = {
+                name: document.getElementById('name').value,
+                position: document.getElementById('position').value,
+                skills: document.getElementById('skills').value,
+                projects: getProjects()
+            };
+
+            const response = await fetch(`${API_URL}/api/portfolio/save`, {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` 
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert(data.message);
+                
+                const port = data.portfolio;
+                document.getElementById('res-title').innerText = port.title;
+                document.getElementById('res-intro').innerText = port.intro;
+                document.getElementById('res-details').innerText = port.projects.map(project => `${project.title}\n${project.description}`).join('\n\n');
+                
+                const skillsList = document.getElementById('res-skills');
+                skillsList.innerHTML = '';
+                port.tech_stack.forEach(skill => {
+                    const li = document.createElement('li');
+                    li.innerText = skill;
+                    li.style.display = 'inline-block';
+                    li.style.background = '#e2e8f0';
+                    li.style.padding = '5px 10px';
+                    li.style.margin = '5px 5px 0 0';
+                    li.style.borderRadius = '4px';
+                    li.style.fontSize = '0.9rem';
+                    skillsList.appendChild(li);
+                });
+
+                document.getElementById('result').style.display = 'block';
+            } else {
+                alert("오류 발생: " + data.detail);
+                if (response.status === 401) logout();
+            }
+        }
+    </script>
+</body>
+</html>

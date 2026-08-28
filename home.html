@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>포트폴리오 맵</title>
+    <style>
+        @font-face {
+            font-family: 'Pretendard';
+            src: url('/fonts/PretendardVariable.woff2') format('woff2');
+            font-weight: 45 920;
+            font-style: normal;
+            font-display: swap;
+        }
+        :root { --ink: #1A365D; --muted: #718096; --blue: #3182CE; --navy: #1A365D; --pale: #F4F6F9; --line: #b7d8f6; --card: #fff; }
+        * { box-sizing: border-box; }
+        body { margin: 0; background: var(--pale); color: var(--ink); font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif; }
+        header { height: 74px; max-width: 1200px; margin: auto; padding: 0 28px; display: flex; align-items: center; justify-content: space-between; }
+        .brand { color: var(--blue); font-size: 1.12rem; font-weight: 850; letter-spacing: -.03em; text-decoration: none; }
+        nav { display: flex; gap: 9px; align-items: center; }
+        button { border: 0; cursor: pointer; font: inherit; font-weight: 700; border-radius: 9px; padding: 10px 15px; }
+        .ghost { background: transparent; color: var(--ink); }
+        .primary { color: #fff; background: var(--blue); box-shadow: 0 7px 18px #2076d42b; }
+        .primary:hover { background: #1766bc; }
+        .theme-switch { color: var(--ink); background: transparent; border: 1px solid #c9d7e7; }
+        main { max-width: 1200px; margin: auto; padding: 42px 28px 76px; }
+        .hero { min-height: 505px; display: grid; grid-template-columns: 1fr 1fr; gap: 55px; align-items: center; }
+        .eyebrow { display: inline-block; padding: 7px 11px; border-radius: 20px; background: #e7f2ff; color: #1766bc; font-size: .8rem; font-weight: 800; letter-spacing: .04em; }
+        h1 { margin: 18px 0; font-size: clamp(2.35rem, 5vw, 4.5rem); line-height: 1.12; letter-spacing: -.065em; }
+        h1 em { color: var(--blue); font-style: normal; }
+        .hero p { max-width: 510px; margin: 0; color: var(--muted); font-size: 1.08rem; line-height: 1.75; }
+        .hero-actions { margin-top: 28px; display: flex; gap: 11px; }
+        .hero-actions button { padding: 13px 18px; }
+        .outline { border: 1px solid #c9d7e7; color: var(--navy); background: var(--card); }
+        .map-preview { position: relative; min-height: 385px; border-radius: 28px; overflow: hidden; background: linear-gradient(145deg, #e5f2ff, #fff); border: 1px solid #d9ecfd; }
+        .map-preview svg { position: absolute; width: 100%; height: 100%; }
+        .map-preview line { stroke: var(--line); stroke-width: 2.3; }
+        .preview-node { position: absolute; padding: 12px 14px; border-radius: 13px; background: var(--card); box-shadow: 0 10px 22px #2f71a71c; color: var(--ink); font-size: .86rem; font-weight: 750; }
+        .preview-node b { display: block; color: var(--navy); font-size: .94rem; margin-bottom: 3px; }
+        .core { top: 39%; left: 35%; width: 30%; padding: 23px 10px; text-align: center; border-radius: 50%; background: linear-gradient(145deg, #2b8dec, #1556a1); color: #fff; box-shadow: 0 13px 25px #2169b34a; }
+        .core b { color: #fff; }
+        .skills { top: 12%; left: 8%; } .projects { bottom: 11%; left: 7%; } .strength { top: 13%; right: 8%; } .career { bottom: 12%; right: 8%; }
+        .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 62px; }
+        .feature { padding: 23px; border: 1px solid #e1ebf5; border-radius: 16px; background: var(--card); }
+        .feature span { font-size: 1.4rem; } .feature h2 { margin: 11px 0 7px; font-size: 1.05rem; } .feature p { margin: 0; color: var(--muted); line-height: 1.6; font-size: .92rem; }
+        body.dark { --ink: #E0E0E0; --muted: #b6b6b6; --blue: #BB86FC; --navy: #E0E0E0; --pale: #121212; --line: #03DAC6; --card: #1e1e1e; }
+        body.dark .outline, body.dark .theme-switch { border-color: #03DAC6; color: #03DAC6; } body.dark .map-preview { background: linear-gradient(145deg, #202020, #161616); border-color: #03DAC6; } body.dark .feature { border-color: #BB86FC; box-shadow: 0 0 0 1px #BB86FC22; } body.dark .preview-node { border: 1px solid #03DAC6; } body.dark .primary { background: #BB86FC; color: #121212; } body.dark .core { border: 2px solid #BB86FC; background: linear-gradient(145deg, #BB86FC, #6b3fa0); } body.dark .preview-node b { color: var(--ink); }
+        @media (max-width: 760px) { header, main { padding-left: 20px; padding-right: 20px; } .hero { grid-template-columns: 1fr; gap: 35px; } .map-preview { min-height: 340px; } .features { grid-template-columns: 1fr; margin-top: 42px; } }
+    </style>
+</head>
+<body>
+    <header>
+        <a class="brand" href="/">포트폴리오 맵</a>
+        <nav>
+            <button id="theme-switch" class="theme-switch" type="button" onclick="toggleTheme()"></button>
+            <button id="login-button" class="ghost" type="button" onclick="location.href='/editor'">로그인</button>
+            <button id="start-button" class="primary" type="button" onclick="location.href='/editor'">시작하기</button>
+        </nav>
+    </header>
+    <main>
+        <section class="hero">
+            <div>
+                <h1>나의 경험을<br><em>한 장의 지도</em>로.</h1>
+                <p>흩어진 기술과 프로젝트, 경력을 연결해 나만의 이야기로 보여주세요.<br>포트폴리오 맵은 입력한 내용을 직관적인 마인드맵으로 완성합니다.</p>
+                <div class="hero-actions">
+                    <button class="primary" type="button" onclick="location.href='/editor'">포트폴리오 만들기</button>
+                    <button class="outline" type="button" onclick="openMindMap()">마인드맵 보기</button>
+                </div>
+            </div>
+            <div class="map-preview" aria-label="마인드맵 미리보기">
+                <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                    <line x1="49" y1="50" x2="25" y2="27" /><line x1="49" y1="50" x2="25" y2="73" />
+                    <line x1="51" y1="50" x2="75" y2="27" /><line x1="51" y1="50" x2="75" y2="73" />
+                </svg>
+                <div class="preview-node skills"><b>보유 기술</b>HTML · CSS · JS</div>
+                <div class="preview-node projects"><b>프로젝트</b>제목과 역할</div>
+                <div class="preview-node core"><b>나의 포트폴리오</b>지원 포지션</div>
+                <div class="preview-node strength"><b>핵심 강점</b>나만의 이야기</div>
+                <div class="preview-node career"><b>경력 · 경험</b>성장 기록</div>
+            </div>
+        </section>
+        <section class="features">
+            <article class="feature"><span>✦</span><h2>프로젝트를 차곡차곡</h2><p>제목과 설명을 분리해 여러 프로젝트를 언제든 추가하고 수정할 수 있습니다.</p></article>
+            <article class="feature"><span>⌘</span><h2>연결되는 마인드맵</h2><p>중심의 나와 기술, 프로젝트, 경험이 하나의 흐름으로 이어집니다.</p></article>
+            <article class="feature"><span>↗</span><h2>한눈에 보여주기</h2><p>텍스트 나열 대신 구조화된 화면으로 나의 강점을 더 선명하게 전달하세요.</p></article>
+        </section>
+    </main>
+    <script>
+        function applyTheme() {
+            const isDark = localStorage.getItem('portfolio-theme') === 'dark';
+            document.body.classList.toggle('dark', isDark);
+            document.getElementById('theme-switch').textContent = isDark ? '☀ 화이트' : '◐ 다크';
+        }
+        function toggleTheme() {
+            localStorage.setItem('portfolio-theme', document.body.classList.contains('dark') ? 'light' : 'dark');
+            applyTheme();
+        }
+        applyTheme();
+        if (localStorage.getItem('access_token')) {
+            const navigation = document.querySelector('nav');
+            navigation.innerHTML = `
+                <button id="theme-switch" class="theme-switch" type="button" onclick="toggleTheme()"></button>
+                <button class="ghost" type="button" onclick="openMindMap()">내 마인드맵</button>
+                <button class="primary" type="button" onclick="location.href='/editor'">마이페이지</button>
+                <button class="ghost" type="button" onclick="logout()">로그아웃</button>`;
+            applyTheme();
+        }
+
+        function logout() {
+            localStorage.removeItem('access_token');
+            location.reload();
+        }
+
+        function openMindMap() {
+            location.href = `/mindmap?updated=${Date.now()}`;
+        }
+    </script>
+</body>
+</html>
