@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>포트폴리오 맵</title>
     <style>
+        /* 공통 폰트와 메인 소개 페이지의 화이트·다크 테마 변수 */
+        /* 제공된 Pretendard 웹폰트를 모든 화면 텍스트에 적용합니다. */
         @font-face {
             font-family: 'Pretendard';
             src: url('/fonts/PretendardVariable.woff2') format('woff2');
@@ -12,9 +14,11 @@
             font-style: normal;
             font-display: swap;
         }
-        :root { --ink: #1A365D; --muted: #718096; --blue: #3182CE; --navy: #1A365D; --pale: #F4F6F9; --line: #b7d8f6; --card: #fff; }
+        /* 화이트 모드의 공통 색상과 다크 모드에서 교체되는 디자인 변수입니다. */
+        :root { --ink: #1A365D; --muted: #718096; --blue: #3182CE; --navy: #1A365D; --pale: #F4F6F9; --line: #B7D8F6; --card: #fff; }
         * { box-sizing: border-box; }
         body { margin: 0; background: var(--pale); color: var(--ink); font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif; }
+        /* 상단 탐색 영역과 마인드맵 중심의 서비스 소개 화면 */
         header { height: 74px; max-width: 1200px; margin: auto; padding: 0 28px; display: flex; align-items: center; justify-content: space-between; }
         .brand { color: var(--blue); font-size: 1.12rem; font-weight: 850; letter-spacing: -.03em; text-decoration: none; }
         nav { display: flex; gap: 9px; align-items: center; }
@@ -32,24 +36,32 @@
         .hero-actions { margin-top: 28px; display: flex; gap: 11px; }
         .hero-actions button { padding: 13px 18px; }
         .outline { border: 1px solid #c9d7e7; color: var(--navy); background: var(--card); }
+        /* 실제 마인드맵 기능을 미리 보여 주는 정적 미리보기 카드 */
         .map-preview { position: relative; min-height: 385px; border-radius: 28px; overflow: hidden; background: linear-gradient(145deg, #e5f2ff, #fff); border: 1px solid #d9ecfd; }
         .map-preview svg { position: absolute; width: 100%; height: 100%; }
         .map-preview line { stroke: var(--line); stroke-width: 2.3; }
         .preview-node { position: absolute; padding: 12px 14px; border-radius: 13px; background: var(--card); box-shadow: 0 10px 22px #2f71a71c; color: var(--ink); font-size: .86rem; font-weight: 750; }
         .preview-node b { display: block; color: var(--navy); font-size: .94rem; margin-bottom: 3px; }
-        .core { top: 39%; left: 35%; width: 30%; padding: 23px 10px; text-align: center; border-radius: 50%; background: linear-gradient(145deg, #2b8dec, #1556a1); color: #fff; box-shadow: 0 13px 25px #2169b34a; }
+        .core { top: 39%; left: 35%; width: 30%; padding: 23px 10px; text-align: center; border-radius: 50%; background: linear-gradient(145deg, #2B8DEC, #1556A1); color: #fff; box-shadow: 0 13px 25px #2169B34A; }
         .core b { color: #fff; }
         .skills { top: 12%; left: 8%; } .projects { bottom: 11%; left: 7%; } .strength { top: 13%; right: 8%; } .career { bottom: 12%; right: 8%; }
+        /* 서비스의 핵심 장점을 설명하는 하단 카드 목록 */
         .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 62px; }
         .feature { padding: 23px; border: 1px solid #e1ebf5; border-radius: 16px; background: var(--card); }
         .feature span { font-size: 1.4rem; } .feature h2 { margin: 11px 0 7px; font-size: 1.05rem; } .feature p { margin: 0; color: var(--muted); line-height: 1.6; font-size: .92rem; }
-        body.dark { --ink: #E0E0E0; --muted: #b6b6b6; --blue: #BB86FC; --navy: #E0E0E0; --pale: #121212; --line: #03DAC6; --card: #1e1e1e; }
-        body.dark .outline, body.dark .theme-switch { border-color: #03DAC6; color: #03DAC6; } body.dark .map-preview { background: linear-gradient(145deg, #202020, #161616); border-color: #03DAC6; } body.dark .feature { border-color: #BB86FC; box-shadow: 0 0 0 1px #BB86FC22; } body.dark .preview-node { border: 1px solid #03DAC6; } body.dark .primary { background: #BB86FC; color: #121212; } body.dark .core { border: 2px solid #BB86FC; background: linear-gradient(145deg, #BB86FC, #6b3fa0); } body.dark .preview-node b { color: var(--ink); }
+        .document-link { margin-top: 22px; text-align: center; }
+        .document-link a { display: inline-block; padding: 12px 18px; border: 1px solid var(--blue); border-radius: 9px; color: var(--blue); background: var(--card); font-weight: 750; text-decoration: none; }
+        .document-link a:hover { background: #e9f3fd; }
+        /* 다크 모드에서는 퍼플을 주요 버튼·보더에, 민트를 연결선 포인트에 사용합니다. */
+        body.dark { --ink: #F1F1F1; --muted: #C4C4C4; --blue: #C4A1FF; --navy: #F1F1F1; --pale: #252525; --line: #C4A1FF; --card: #333333; }
+        body.dark .outline, body.dark .theme-switch { border-color: #C4A1FF; color: #D7B7FF; } body.dark .map-preview { background: linear-gradient(145deg, #424242, #303030); border-color: #C4A1FF; } body.dark .feature { border-color: #C4A1FF; box-shadow: 0 0 0 1px #C4A1FF22; } body.dark .preview-node { border: 1px solid #C4A1FF; } body.dark .primary { background: #C4A1FF; color: #241233; } body.dark .core { border: 2px solid #D7B7FF; background: linear-gradient(145deg, #C4A1FF, #7E57B8); } body.dark .preview-node b { color: var(--ink); }
         @media (max-width: 760px) { header, main { padding-left: 20px; padding-right: 20px; } .hero { grid-template-columns: 1fr; gap: 35px; } .map-preview { min-height: 340px; } .features { grid-template-columns: 1fr; margin-top: 42px; } }
     </style>
 </head>
 <body>
+    <!-- 서비스 메인 이동, 테마 전환, 로그인 상태별 메뉴를 제공하는 상단 영역입니다. -->
     <header>
+        <!-- 어느 페이지에서나 메인 화면으로 돌아오는 브랜드 링크 -->
         <a class="brand" href="/">포트폴리오 맵</a>
         <nav>
             <button id="theme-switch" class="theme-switch" type="button" onclick="toggleTheme()"></button>
@@ -58,6 +70,8 @@
         </nav>
     </header>
     <main>
+        <!-- 서비스의 차별점인 마인드맵을 소개하고 편집 화면으로 연결합니다. -->
+        <!-- 마인드맵을 서비스의 핵심 가치로 보여주는 소개 영역입니다. -->
         <section class="hero">
             <div>
                 <h1>나의 경험을<br><em>한 장의 지도</em>로.</h1>
@@ -67,6 +81,7 @@
                     <button class="outline" type="button" onclick="openMindMap()">마인드맵 보기</button>
                 </div>
             </div>
+            <!-- 실제 입력 내용과 같은 구조를 보여주는 정적 마인드맵 미리보기입니다. -->
             <div class="map-preview" aria-label="마인드맵 미리보기">
                 <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
                     <line x1="49" y1="50" x2="25" y2="27" /><line x1="49" y1="50" x2="25" y2="73" />
@@ -79,13 +94,21 @@
                 <div class="preview-node career"><b>경력 · 경험</b>성장 기록</div>
             </div>
         </section>
+        <!-- 프로젝트 작성과 시각화 기능을 설명하는 안내 카드 영역입니다. -->
         <section class="features">
+            <!-- 포트폴리오 작성·시각화·공유 흐름을 설명하는 기능 카드 -->
             <article class="feature"><span>✦</span><h2>프로젝트를 차곡차곡</h2><p>제목과 설명을 분리해 여러 프로젝트를 언제든 추가하고 수정할 수 있습니다.</p></article>
             <article class="feature"><span>⌘</span><h2>연결되는 마인드맵</h2><p>중심의 나와 기술, 프로젝트, 경험이 하나의 흐름으로 이어집니다.</p></article>
             <article class="feature"><span>↗</span><h2>한눈에 보여주기</h2><p>텍스트 나열 대신 구조화된 화면으로 나의 강점을 더 선명하게 전달하세요.</p></article>
         </section>
+        <!-- 프로젝트 소개 PDF를 별도 탭에서 확인할 수 있는 외부 문서 링크입니다. -->
+        <div class="document-link">
+            <a href="https://drive.google.com/file/d/125tQAG2_cHx5fKIMxwbGADB2ejBnp3mY/view?usp=sharing" target="_blank" rel="noopener noreferrer">진로활동 PDF 보기 ↗</a>
+        </div>
     </main>
     <script>
+        // 테마 선택값을 브라우저에 저장해 페이지 이동 뒤에도 유지합니다.
+        // localStorage에 저장한 테마 설정을 현재 페이지에 적용합니다.
         function applyTheme() {
             const isDark = localStorage.getItem('portfolio-theme') === 'dark';
             document.body.classList.toggle('dark', isDark);
@@ -96,7 +119,9 @@
             applyTheme();
         }
         applyTheme();
+        // 로그인 상태이면 일반 메뉴 대신 마이페이지·내 마인드맵·로그아웃 메뉴를 표시합니다.
         if (localStorage.getItem('access_token')) {
+            // 로그인된 사용자는 마이페이지와 개인 마인드맵으로 바로 이동할 수 있습니다.
             const navigation = document.querySelector('nav');
             navigation.innerHTML = `
                 <button id="theme-switch" class="theme-switch" type="button" onclick="toggleTheme()"></button>
@@ -107,11 +132,15 @@
         }
 
         function logout() {
+            // 브라우저에만 저장된 로그인 토큰을 삭제해 세션을 종료합니다.
+            // 브라우저에 저장한 JWT 토큰만 제거해 현재 세션을 종료합니다.
             localStorage.removeItem('access_token');
             location.reload();
         }
 
         function openMindMap() {
+            // 시간값을 붙여 이전 마인드맵 화면 캐시 대신 최신 데이터를 불러옵니다.
+            // 최신 저장 데이터를 불러오도록 시간값을 붙여 마인드맵으로 이동합니다.
             location.href = `/mindmap?updated=${Date.now()}`;
         }
     </script>

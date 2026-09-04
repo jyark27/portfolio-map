@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>portfolio-map</title>
     <style>
+        /* Pretendard 웹 폰트와 마이페이지 전체에서 사용하는 기본 색상 */
+        /* 제공된 Pretendard 웹폰트를 편집·인증 화면 전체에 적용합니다. */
         @font-face {
             font-family: 'Pretendard';
             src: url('/fonts/PretendardVariable.woff2') format('woff2');
@@ -13,13 +15,14 @@
             font-display: swap;
         }
         /* ================= 화이트 테마 CSS ================= */
+        /* 화이트 모드에서 사용하는 기본 색상 변수입니다. */
         :root {
             --bg-color: #F4F6F9;
             --card-bg: #ffffff;
             --text-main: #1A365D;
             --text-muted: #718096;
             --primary-color: #3182CE;
-            --primary-hover: #2b6cb0;
+            --primary-hover: #2B6CB0;
             --border-color: #e2e8f0;
         }
 
@@ -31,7 +34,7 @@
             color: var(--text-main); 
         }
 
-        /* 상단 네비게이션 바 */
+        /* 상단 네비게이션 바: 메인, 테마, 로그인 상태별 메뉴를 제공합니다. */
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -73,7 +76,7 @@
             background: var(--primary-hover);
         }
 
-        /* 메인 컨텐츠 영역 (카드 UI) */
+        /* 로그인·회원가입·포트폴리오 편집 화면을 담는 카드 영역 */
         .container {
             max-width: 600px;
             margin: 50px auto;
@@ -98,6 +101,7 @@
             box-sizing: border-box; 
             border: 1px solid var(--border-color); 
             border-radius: 6px; 
+            font-family: inherit;
             font-size: 1rem;
             transition: border-color 0.2s;
         }
@@ -132,15 +136,17 @@
         }
 
         .theme-switch { background: transparent; color: var(--text-main); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 6px; font-weight: 700; cursor: pointer; }
-        body.dark { --bg-color: #121212; --card-bg: #1d1d1d; --text-main: #E0E0E0; --text-muted: #b5b5b5; --primary-color: #BB86FC; --primary-hover: #9b61e5; --border-color: #3c3c3c; }
-        body.dark #result { background: #242424; }
-        body.dark .secondary-btn { background: #1d1d1d; color: #03DAC6; border-color: #03DAC6; }
+        /* 다크 모드에서는 퍼플·민트 포인트와 높은 대비를 적용합니다. */
+        body.dark { --bg-color: #252525; --card-bg: #333333; --text-main: #F1F1F1; --text-muted: #C4C4C4; --primary-color: #C4A1FF; --primary-hover: #B184FA; --border-color: #5A4A70; }
+        body.dark #result { background: #3A3A3A; }
+        body.dark .secondary-btn { background: #333333; color: #D7B7FF; border-color: #C4A1FF; }
         body.dark .card { border: 1px solid #BB86FC; box-shadow: 0 4px 20px #00000055, 0 0 0 1px #BB86FC22; }
-        body.dark .project-card { background: #242424; border-color: #03DAC6; }
-        body.dark input, body.dark textarea { background: #242424; color: #E0E0E0; border-color: #03DAC6; }
-        body.dark .add-project { background: #1d1d1d; border-color: #BB86FC; color: #BB86FC; }
+        body.dark .project-card { background: #3A3A3A; border-color: #C4A1FF; }
+        body.dark input, body.dark textarea { background: #3A3A3A; color: #F1F1F1; border-color: #C4A1FF; }
+        body.dark .add-project { background: #333333; border-color: #C4A1FF; color: #D7B7FF; }
         .secondary-btn:hover { background: #ebf8ff; }
 
+        /* 여러 프로젝트를 제목과 설명으로 구분해 입력하는 반복 카드 */
         .project-card { padding: 18px; margin-bottom: 12px; border: 1px solid var(--border-color); border-radius: 8px; background: #f8fbff; }
         .project-card input { margin-bottom: 10px; }
         .project-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; font-weight: 700; }
@@ -154,7 +160,9 @@
 </head>
 <body>
 
+    <!-- 메인 이동, 테마 전환, 로그인 상태별 메뉴를 제공하는 공통 내비게이션입니다. -->
     <nav class="navbar">
+        <!-- 브랜드 링크와 로그인 상태에 따라 바뀌는 전역 메뉴 -->
         <a class="logo" href="/">포트폴리오 맵</a>
         <button id="theme-switch" class="theme-switch" type="button" onclick="toggleTheme()"></button>
         
@@ -170,8 +178,11 @@
         </div>
     </nav>
 
+    <!-- 로그인·회원가입·포트폴리오 편집 화면을 조건에 따라 전환하는 콘텐츠 영역입니다. -->
     <div class="container">
+        <!-- 로그인·회원가입·마이페이지 중 현재 필요한 화면 하나만 표시합니다. -->
         
+        <!-- 이메일과 비밀번호로 JWT 토큰을 발급받는 로그인 폼입니다. -->
         <form id="login-box" class="card" onsubmit="login(event)">
             <h2>로그인</h2>
             <p class="text-muted">포트폴리오를 관리하려면 로그인하세요.</p>
@@ -186,6 +197,7 @@
             <button type="submit" class="submit-btn">로그인</button>
         </form>
 
+        <!-- 새 계정을 데이터베이스에 생성하는 회원가입 폼입니다. -->
         <form id="signup-box" class="card hidden" onsubmit="signup(event)">
             <h2>회원가입</h2>
             <p class="text-muted">새로운 계정을 만들어보세요.</p>
@@ -204,7 +216,9 @@
             <button type="submit" class="submit-btn">계정 생성</button>
         </form>
 
+        <!-- 로그인 사용자가 여러 프로젝트를 작성·수정·저장하는 마이페이지입니다. -->
         <div id="app-section" class="card hidden">
+            <!-- 저장된 포트폴리오를 불러오고 프로젝트를 추가·수정하는 마이페이지 -->
             <h2>포트폴리오 편집</h2>
             <p class="text-muted">언제든 내용을 수정한 뒤 다시 저장할 수 있습니다.</p>
             
@@ -213,8 +227,12 @@
                 <input type="text" id="name" placeholder="홍길동">
             </div>
             <div class="form-group">
-                <label>지원 포지션</label>
-                <input type="text" id="position" placeholder="프론트엔드 개발자">
+                <label>역할</label>
+                <input type="text" id="role" placeholder="프론트엔드 개발자">
+            </div>
+            <div class="form-group">
+                <label>강점</label>
+                <textarea id="strength" rows="3" placeholder="나를 가장 잘 보여 주는 강점과 차별점을 입력하세요."></textarea>
             </div>
             <div class="form-group">
                 <label>보유 기술 (쉼표로 구분)</label>
@@ -241,9 +259,12 @@
     </div>
 
     <script>
+        // API 주소는 로컬과 Render 배포 환경 모두 현재 접속한 서버를 사용합니다.
         // 로컬과 Render 배포 환경 모두에서 현재 접속한 서버의 API를 사용합니다.
         const API_URL = window.location.origin;
 
+        // localStorage에 저장한 테마 설정을 현재 페이지에 적용합니다.
+        // 테마 선택값을 모든 페이지에서 공유하도록 localStorage에 보관합니다.
         function applyTheme() {
             const isDark = localStorage.getItem('portfolio-theme') === 'dark';
             document.body.classList.toggle('dark', isDark);
@@ -256,10 +277,11 @@
         applyTheme();
 
         function isValidEmail(email) {
+            // API 요청 전 사용자에게 이메일 형식 오류를 즉시 안내합니다.
             return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
         }
 
-        // 화면 켜질 때 로그인 상태 확인
+        // 화면이 열리면 브라우저 토큰으로 로그인 여부를 확인합니다.
         window.onload = () => {
             const token = localStorage.getItem("access_token");
             if (token) {
@@ -288,6 +310,8 @@
         }
 
         async function loadSavedPortfolio() {
+            // 마지막 저장 데이터를 가져와 마이페이지 입력란에 채웁니다.
+            // 마지막 저장본을 불러와 입력 폼에서 계속 수정할 수 있게 합니다.
             const token = localStorage.getItem("access_token");
             if (!token) return;
 
@@ -298,12 +322,16 @@
             if (!response.ok) return;
             const portfolio = await response.json();
             document.getElementById('name').value = portfolio.name || '';
-            document.getElementById('position').value = portfolio.position || '';
+            // 기존에 저장된 position 데이터도 역할로 불러와 이전 작성 내용을 보존합니다.
+            document.getElementById('role').value = portfolio.role || portfolio.position || '';
+            document.getElementById('strength').value = portfolio.strength || '';
             document.getElementById('skills').value = (portfolio.tech_stack || []).join(', ');
             renderProjects(portfolio.projects || (portfolio.details ? [{ title: '경력 및 프로젝트', description: portfolio.details }] : []));
         }
 
         function addProject(project = { title: '', description: '' }) {
+            // 프로젝트 한 건을 입력할 수 있는 카드와 삭제 버튼을 동적으로 만듭니다.
+            // 프로젝트 제목·내용 입력 카드 한 개와 삭제 동작을 동적으로 생성합니다.
             const list = document.getElementById('project-list');
             const card = document.createElement('div');
             card.className = 'project-card';
@@ -321,6 +349,8 @@
         }
 
         function getProjects() {
+            // 화면의 프로젝트 카드들을 API가 받을 배열 형태로 변환합니다.
+            // 화면의 프로젝트 카드들을 API가 받는 배열 형식으로 변환합니다.
             return [...document.querySelectorAll('.project-card')]
                 .map(card => ({ title: card.querySelector('.project-title').value.trim(), description: card.querySelector('.project-description').value.trim() }))
                 .filter(project => project.title || project.description);
@@ -331,11 +361,14 @@
         }
 
         function openMindMap() {
+            // 최신 저장 내용을 보여 주기 위해 마인드맵을 별도 창으로 엽니다.
+            // 저장된 데이터를 새로 반영하기 위해 시간값을 붙여 별도 마인드맵 창을 엽니다.
             window.open(`/mindmap?updated=${Date.now()}`, 'portfolioMindMap');
         }
 
         // 로그아웃 시 UI 변경
         function logout() {
+            // 브라우저 토큰을 제거하고 인증 전 화면으로 되돌립니다.
             localStorage.removeItem("access_token");
             document.getElementById('nav-user').classList.add('hidden');
             document.getElementById('nav-guest').classList.remove('hidden');
@@ -423,7 +456,8 @@
 
             const payload = {
                 name: document.getElementById('name').value,
-                position: document.getElementById('position').value,
+                role: document.getElementById('role').value,
+                strength: document.getElementById('strength').value,
                 skills: document.getElementById('skills').value,
                 projects: getProjects()
             };

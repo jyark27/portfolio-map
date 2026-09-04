@@ -1,7 +1,12 @@
+# FastAPI 웹 서버와 ASGI 실행기
 fastapi>=0.115,<1
 uvicorn[standard]>=0.30,<1
+
+# SQLite(로컬)와 PostgreSQL(Render) 연결을 위한 ORM 및 드라이버
 SQLAlchemy>=2,<3
 psycopg[binary]>=3.2,<4
+
+# 로그인 인증, 비밀번호 암호화, 폼·이메일 검증
 python-jose[cryptography]>=3.3,<4
 bcrypt>=4,<6
 python-multipart>=0.0.9,<1

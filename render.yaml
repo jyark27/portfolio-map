@@ -1,23 +1,29 @@
+# Render Blueprint: 웹 서비스와 PostgreSQL 데이터베이스를 함께 생성합니다.
 services:
   - type: web
     name: portfolio-map
     runtime: python
     plan: free
+    # 배포 시 의존성을 설치하고 FastAPI 서버를 Render가 제공한 포트에서 실행합니다.
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /
     envVars:
+      # 생성되는 PostgreSQL의 내부 연결 문자열을 앱의 DATABASE_URL로 주입합니다.
       - key: DATABASE_URL
         fromDatabase:
           name: portfolio-map-db
           property: connectionString
+      # JWT 토큰 서명용 비밀값은 Render가 자동 생성해 코드에 노출하지 않습니다.
       - key: SECRET_KEY
         generateValue: true
+      # 로그인 토큰의 기본 만료 시간(분)입니다.
       - key: ACCESS_TOKEN_EXPIRE_MINUTES
         value: "60"
 
 databases:
   - name: portfolio-map-db
     plan: free
+    # 웹 서비스가 사용하는 영구 PostgreSQL 데이터베이스 설정입니다.
     databaseName: portfolio_map
     user: portfolio_map_user
