@@ -25,6 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent
 mimetypes.add_type("font/woff2", ".woff2")
 app.mount("/fonts", StaticFiles(directory=BASE_DIR / "public" / "fonts"), name="fonts")
 
+# 로그인 없이 누구나 볼 수 있는 개발자 소개용 포트폴리오 계정입니다.
+DEV_PORTFOLIO_EMAIL = "jiyong0727@gmail.com"
+
 # 브라우저 화면과 API가 다른 주소에서 실행되는 개발 환경을 허용합니다.
 app.add_middleware(
     CORSMiddleware,
@@ -48,6 +51,11 @@ async def serve_editor():
 async def serve_mindmap():
     """저장된 포트폴리오를 시각화하는 마인드맵 화면을 반환합니다."""
     return FileResponse(BASE_DIR / "mindmap.html", headers={"Cache-Control": "no-store"})
+
+@app.get("/dev-mindmap", include_in_schema=False)
+async def serve_dev_mindmap():
+    """로그인 없이 누구나 볼 수 있는 개발자 소개용 마인드맵 화면을 반환합니다."""
+    return FileResponse(BASE_DIR / "devmindmap.html", headers={"Cache-Control": "no-store"})
 
 # ==========================================
 # 2. 데이터베이스 설정
@@ -152,9 +160,10 @@ class UserCreate(BaseModel):
     password: str
 
 class ProjectInput(BaseModel):
-    """포트폴리오에 포함되는 프로젝트 한 건의 제목과 설명입니다."""
+    """포트폴리오에 포함되는 프로젝트 한 건의 제목, 설명, 이미지입니다."""
     title: str
     description: str
+    image: str | None = None  # 프로젝트 이미지 (base64 데이터 URL, 선택 항목)
 
 class PortfolioInput(BaseModel):
     """마이페이지에서 저장하는 포트폴리오 전체 입력값입니다."""
@@ -238,6 +247,23 @@ async def get_latest_portfolio(current_user: User = Depends(get_current_user), d
     portfolio = (
         db.query(PortfolioDB)
         .filter(PortfolioDB.user_id == current_user.id)
+        .order_by(PortfolioDB.id.desc())
+        .first()
+    )
+    if not portfolio:
+        raise HTTPException(status_code=404, detail="저장된 포트폴리오가 없습니다.")
+    return json.loads(portfolio.content)
+
+@app.get("/api/portfolio/dev")
+async def get_dev_portfolio(db: Session = Depends(get_db)):
+    """로그인 없이 지정된 개발자 계정의 최신 포트폴리오를 공개로 반환합니다."""
+    user = db.query(User).filter(User.email == DEV_PORTFOLIO_EMAIL).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="개발자 계정을 찾을 수 없습니다.")
+
+    portfolio = (
+        db.query(PortfolioDB)
+        .filter(PortfolioDB.user_id == user.id)
         .order_by(PortfolioDB.id.desc())
         .first()
     )

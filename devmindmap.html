@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>portfolio-map | 마인드맵</title>
+    <title>portfolio-map | 개발자 소개</title>
     <style>
         /* Pretendard 폰트와 마인드맵 노드에 공통으로 적용되는 테마 변수 */
-        /* 제공된 Pretendard 웹폰트를 마인드맵 화면 전체에 적용합니다. */
+        /* 제공된 Pretendard 웹폰트를 화면 전체에 적용합니다. */
         @font-face {
             font-family: 'Pretendard';
             src: url('/fonts/PretendardVariable.woff2') format('woff2');
@@ -20,10 +20,11 @@
         body { margin: 0; min-height: 100vh; font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif; color: var(--ink); background: var(--page); }
         header { min-height: 70px; padding: 15px clamp(20px, 5vw, 70px); display: flex; justify-content: space-between; align-items: center; background: var(--card); box-shadow: 0 2px 12px #19375f12; }
         .brand { display: flex; align-items: center; gap: 8px; font-size: 1.1rem; font-weight: 800; color: var(--blue); text-decoration: none; }
-        .edit { border: 0; border-radius: 8px; padding: 10px 16px; background: var(--blue); color: white; font-weight: 700; cursor: pointer; }
-        .edit:hover { background: #1765bd; }
+        .home-btn { border: 1px solid #b9d2ee; border-radius: 8px; padding: 9px 16px; background: transparent; color: var(--navy); font-weight: 700; cursor: pointer; }
+        .home-btn:hover { background: #eaf3fd; }
         main { max-width: 1250px; margin: 0 auto; padding: 32px 20px 60px; }
         .heading { text-align: center; margin-bottom: 26px; }
+        .eyebrow { display: inline-block; padding: 6px 12px; border-radius: 20px; background: #e7f2ff; color: #1766bc; font-size: .8rem; font-weight: 800; letter-spacing: .04em; margin-bottom: 12px; }
         h1 { font-size: clamp(1.55rem, 3vw, 2.35rem); margin: 0 0 8px; color: var(--navy); }
         .heading p { margin: 0; color: var(--muted); }
         /* 위쪽 정보·중앙 포트폴리오·아래쪽 프로젝트 가지를 배치하는 마인드맵 */
@@ -50,13 +51,16 @@
         .project-image { width: 100%; max-height: 160px; object-fit: cover; border-radius: 10px; margin-bottom: 10px; display: block; }
         .empty { grid-column: 1 / -1; align-self: center; text-align: center; padding: 70px 25px; background: var(--card); border: 1px solid var(--node-border); border-radius: 20px; color: var(--muted); box-shadow: 0 10px 25px #1c416010; }
         .hidden { display: none; }
+        /* PDF 등 참고 자료로 이동하는 링크 영역 */
+        .document-link { margin-top: 34px; text-align: center; }
+        .document-link a { display: inline-block; padding: 12px 18px; border: 1px solid var(--blue); border-radius: 9px; color: var(--blue); background: var(--card); font-weight: 750; text-decoration: none; }
+        .document-link a:hover { background: #e9f3fd; }
         @media (max-width: 750px) { .mindmap { min-height: 0; padding: 10px 0; gap: 16px; } .top-nodes, .project-nodes { grid-template-columns: 1fr; } .connections { display: none; } .node { width: 100%; } .center { order: -1; } }
     </style>
 </head>
 <body>
-    <!-- 메인 이동, 마이페이지 이동을 제공하는 공통 헤더입니다. -->
+    <!-- 메인 이동만 제공하는 공개 헤더입니다. 로그인 메뉴가 없습니다. -->
     <header>
-        <!-- 메인으로 돌아가는 브랜드 로고, 마이페이지 이동 버튼 -->
         <a class="brand" href="/">
             <svg width="24" height="24" viewBox="0 0 32 32" aria-hidden="true">
                 <line x1="16" y1="16" x2="6" y2="7" stroke="#B7D8F6" stroke-width="2.4"/>
@@ -71,16 +75,16 @@
             </svg>
             <span>포트폴리오 맵</span>
         </a>
-        <button class="edit" type="button" onclick="location.href='/editor'">마이페이지</button>
+        <button class="home-btn" type="button" onclick="location.href='/'">홈으로</button>
     </header>
     <main>
-        <!-- 위쪽의 기술·역할·강점과 아래쪽의 프로젝트 가지를 연결해 보여주는 마인드맵 영역입니다. -->
+        <!-- 로그인 없이 누구나 볼 수 있는 개발자 소개 마인드맵 영역입니다. -->
         <div class="heading">
-            <h1>나의 포트폴리오 마인드맵</h1>
-            <p>중심에서 연결되는 나의 강점과 경험을 한눈에 확인하세요.</p>
+            <span class="eyebrow">DEVELOPER</span>
+            <h1>이 서비스를 만든 개발자 소개</h1>
+            <p>로그인 없이 누구나 볼 수 있는 개발자의 포트폴리오 마인드맵입니다.</p>
         </div>
         <section id="mindmap" class="mindmap hidden">
-            <!-- 데이터 로드가 성공하면 상단 정보와 하단 프로젝트 가지를 표시합니다. -->
             <svg id="connections" class="connections" aria-hidden="true"></svg>
             <div class="top-nodes">
                 <article class="node skills"><h3>✦ 보유 기술</h3><div id="skills" class="tags"></div></article>
@@ -91,20 +95,20 @@
             <div id="projects" class="project-nodes"></div>
         </section>
         <section id="empty" class="empty hidden">
-            <h2>아직 저장된 포트폴리오가 없습니다.</h2>
-            <p>편집 화면에서 내용을 작성하고 저장한 뒤 마인드맵을 열어주세요.</p>
-            <button class="edit" type="button" onclick="location.href='/editor'">포트폴리오 작성하기</button>
+            <h2>아직 공개된 소개 내용이 없습니다.</h2>
+            <p>개발자 계정에서 포트폴리오를 작성하고 저장하면 이 화면에 표시됩니다.</p>
         </section>
+        <!-- 요청에 따라 진로활동 PDF 링크를 개발자 소개 화면에 첨부합니다. -->
+        <div class="document-link">
+            <a href="https://drive.google.com/file/d/125tQAG2_cHx5fKIMxwbGADB2ejBnp3mY/view?usp=sharing" target="_blank" rel="noopener noreferrer">진로활동 PDF 보기 ↗</a>
+        </div>
     </main>
     <script>
-        // API 주소는 Render와 로컬 개발 환경에서 현재 사이트의 서버를 공유합니다.
-        // 로컬과 Render 배포 환경 모두에서 현재 접속한 서버의 API를 사용합니다.
+        // 로그인 여부와 무관하게 항상 지정된 개발자 계정의 포트폴리오만 공개로 불러옵니다.
         const API_URL = window.location.origin;
-        const token = localStorage.getItem('access_token');
 
         function showEmpty() { document.getElementById('empty').classList.remove('hidden'); }
 
-        // 중앙 노드와 위·아래 가지 노드의 실제 화면 위치를 기준으로 연결선을 그립니다.
         function drawConnections() {
             const map = document.getElementById('mindmap');
             const center = map.querySelector('.center');
@@ -132,24 +136,19 @@
             });
         }
 
-        async function loadMindMap() {
-            // 로그인 사용자의 최신 포트폴리오를 받아 마인드맵 카드에 렌더링합니다.
-            // 최신 포트폴리오를 가져와 기술 태그와 프로젝트 카드를 동적으로 완성합니다.
-            if (!token) { location.href = '/editor'; return; }
+        async function loadDevMindMap() {
+            // 로그인 여부와 관계없이 /api/portfolio/dev 를 호출해 개발자 계정 데이터만 표시합니다.
             try {
-                const response = await fetch(`${API_URL}/api/portfolio/latest`, { headers: { Authorization: `Bearer ${token}` } });
+                const response = await fetch(`${API_URL}/api/portfolio/dev`);
                 if (response.status === 404) { showEmpty(); return; }
-                if (response.status === 401) { localStorage.removeItem('access_token'); location.href = '/editor'; return; }
                 if (!response.ok) throw new Error('portfolio request failed');
                 const portfolio = await response.json();
                 document.getElementById('name').textContent = portfolio.name || '이름 미입력';
-                // 기존 position 데이터도 역할로 표시해 이전 저장 데이터를 호환합니다.
                 const role = portfolio.role || portfolio.position || '역할 미입력';
                 document.getElementById('center-role').textContent = role;
                 document.getElementById('role').textContent = role;
                 document.getElementById('strength').textContent = portfolio.strength || '강점을 입력해 나만의 차별점을 보여주세요.';
                 const projects = document.getElementById('projects');
-                // 여러 프로젝트를 각각 중심과 연결되는 독립 가지 카드로 표시합니다.
                 const projectList = portfolio.projects || (portfolio.details ? [{ title: '경력 및 프로젝트', description: portfolio.details }] : []);
                 if (projectList.length) {
                     projectList.forEach(project => {
@@ -171,10 +170,9 @@
                         projects.appendChild(item);
                     });
                 } else {
-                    projects.innerHTML = '<article class="node project-node"><h4>프로젝트 미입력</h4><p>마이페이지에서 프로젝트를 추가해보세요.</p></article>';
+                    projects.innerHTML = '<article class="node project-node"><h4>프로젝트 미입력</h4><p>아직 등록된 프로젝트가 없습니다.</p></article>';
                 }
                 const skills = document.getElementById('skills');
-                // 쉼표로 저장된 기술 목록을 태그 모양 노드로 만듭니다.
                 (portfolio.tech_stack || []).filter(Boolean).forEach(skill => { const tag = document.createElement('span'); tag.className = 'tag'; tag.textContent = skill; skills.appendChild(tag); });
                 if (!skills.children.length) skills.innerHTML = '<span class="tag">기술 미입력</span>';
                 document.getElementById('mindmap').classList.remove('hidden');
@@ -182,7 +180,7 @@
             } catch (error) { showEmpty(); }
         }
         window.addEventListener('resize', drawConnections);
-        loadMindMap();
+        loadDevMindMap();
     </script>
 </body>
 </html>

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>포트폴리오 맵</title>
     <style>
-        /* 공통 폰트와 메인 소개 페이지의 화이트·다크 테마 변수 */
+        /* 공통 폰트와 메인 소개 페이지의 색상 변수 */
         /* 제공된 Pretendard 웹폰트를 모든 화면 텍스트에 적용합니다. */
         @font-face {
             font-family: 'Pretendard';
@@ -14,19 +14,18 @@
             font-style: normal;
             font-display: swap;
         }
-        /* 화이트 모드의 공통 색상과 다크 모드에서 교체되는 디자인 변수입니다. */
+        /* 공통 색상 디자인 변수입니다. */
         :root { --ink: #1A365D; --muted: #718096; --blue: #3182CE; --navy: #1A365D; --pale: #F4F6F9; --line: #B7D8F6; --card: #fff; }
         * { box-sizing: border-box; }
         body { margin: 0; background: var(--pale); color: var(--ink); font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif; }
         /* 상단 탐색 영역과 마인드맵 중심의 서비스 소개 화면 */
         header { height: 74px; max-width: 1200px; margin: auto; padding: 0 28px; display: flex; align-items: center; justify-content: space-between; }
-        .brand { color: var(--blue); font-size: 1.12rem; font-weight: 850; letter-spacing: -.03em; text-decoration: none; }
+        .brand { display: flex; align-items: center; gap: 8px; color: var(--blue); font-size: 1.12rem; font-weight: 850; letter-spacing: -.03em; text-decoration: none; }
         nav { display: flex; gap: 9px; align-items: center; }
         button { border: 0; cursor: pointer; font: inherit; font-weight: 700; border-radius: 9px; padding: 10px 15px; }
         .ghost { background: transparent; color: var(--ink); }
         .primary { color: #fff; background: var(--blue); box-shadow: 0 7px 18px #2076d42b; }
         .primary:hover { background: #1766bc; }
-        .theme-switch { color: var(--ink); background: transparent; border: 1px solid #c9d7e7; }
         main { max-width: 1200px; margin: auto; padding: 42px 28px 76px; }
         .hero { min-height: 505px; display: grid; grid-template-columns: 1fr 1fr; gap: 55px; align-items: center; }
         .eyebrow { display: inline-block; padding: 7px 11px; border-radius: 20px; background: #e7f2ff; color: #1766bc; font-size: .8rem; font-weight: 800; letter-spacing: .04em; }
@@ -49,22 +48,32 @@
         .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 62px; }
         .feature { padding: 23px; border: 1px solid #e1ebf5; border-radius: 16px; background: var(--card); }
         .feature span { font-size: 1.4rem; } .feature h2 { margin: 11px 0 7px; font-size: 1.05rem; } .feature p { margin: 0; color: var(--muted); line-height: 1.6; font-size: .92rem; }
-        .document-link { margin-top: 22px; text-align: center; }
+        .document-link { margin-top: 22px; text-align: center; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
         .document-link a { display: inline-block; padding: 12px 18px; border: 1px solid var(--blue); border-radius: 9px; color: var(--blue); background: var(--card); font-weight: 750; text-decoration: none; }
         .document-link a:hover { background: #e9f3fd; }
-        /* 다크 모드에서는 퍼플을 주요 버튼·보더에, 민트를 연결선 포인트에 사용합니다. */
-        body.dark { --ink: #F1F1F1; --muted: #C4C4C4; --blue: #C4A1FF; --navy: #F1F1F1; --pale: #252525; --line: #C4A1FF; --card: #333333; }
-        body.dark .outline, body.dark .theme-switch { border-color: #C4A1FF; color: #D7B7FF; } body.dark .map-preview { background: linear-gradient(145deg, #424242, #303030); border-color: #C4A1FF; } body.dark .feature { border-color: #C4A1FF; box-shadow: 0 0 0 1px #C4A1FF22; } body.dark .preview-node { border: 1px solid #C4A1FF; } body.dark .primary { background: #C4A1FF; color: #241233; } body.dark .core { border: 2px solid #D7B7FF; background: linear-gradient(145deg, #C4A1FF, #7E57B8); } body.dark .preview-node b { color: var(--ink); }
         @media (max-width: 760px) { header, main { padding-left: 20px; padding-right: 20px; } .hero { grid-template-columns: 1fr; gap: 35px; } .map-preview { min-height: 340px; } .features { grid-template-columns: 1fr; margin-top: 42px; } }
     </style>
 </head>
 <body>
-    <!-- 서비스 메인 이동, 테마 전환, 로그인 상태별 메뉴를 제공하는 상단 영역입니다. -->
+    <!-- 서비스 메인 이동, 로그인 상태별 메뉴를 제공하는 상단 영역입니다. -->
     <header>
-        <!-- 어느 페이지에서나 메인 화면으로 돌아오는 브랜드 링크 -->
-        <a class="brand" href="/">포트폴리오 맵</a>
+        <!-- 어느 페이지에서나 메인 화면으로 돌아오는 브랜드 로고 -->
+        <a class="brand" href="/">
+            <svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true">
+                <line x1="16" y1="16" x2="6" y2="7" stroke="#B7D8F6" stroke-width="2.4"/>
+                <line x1="16" y1="16" x2="26" y2="7" stroke="#B7D8F6" stroke-width="2.4"/>
+                <line x1="16" y1="16" x2="6" y2="25" stroke="#B7D8F6" stroke-width="2.4"/>
+                <line x1="16" y1="16" x2="26" y2="25" stroke="#B7D8F6" stroke-width="2.4"/>
+                <circle cx="6" cy="7" r="3.4" fill="#83B7E5"/>
+                <circle cx="26" cy="7" r="3.4" fill="#83B7E5"/>
+                <circle cx="6" cy="25" r="3.4" fill="#83B7E5"/>
+                <circle cx="26" cy="25" r="3.4" fill="#83B7E5"/>
+                <circle cx="16" cy="16" r="5.4" fill="#3182CE"/>
+            </svg>
+            <span>포트폴리오 맵</span>
+        </a>
         <nav>
-            <button id="theme-switch" class="theme-switch" type="button" onclick="toggleTheme()"></button>
+            <button class="ghost" type="button" onclick="location.href='/dev-mindmap'">개발자 소개</button>
             <button id="login-button" class="ghost" type="button" onclick="location.href='/editor'">로그인</button>
             <button id="start-button" class="primary" type="button" onclick="location.href='/editor'">시작하기</button>
         </nav>
@@ -97,38 +106,26 @@
         <!-- 프로젝트 작성과 시각화 기능을 설명하는 안내 카드 영역입니다. -->
         <section class="features">
             <!-- 포트폴리오 작성·시각화·공유 흐름을 설명하는 기능 카드 -->
-            <article class="feature"><span>✦</span><h2>프로젝트를 차곡차곡</h2><p>제목과 설명을 분리해 여러 프로젝트를 언제든 추가하고 수정할 수 있습니다.</p></article>
+            <article class="feature"><span>✦</span><h2>프로젝트를 차곡차곡</h2><p>제목과 설명, 이미지를 함께 담아 여러 프로젝트를 언제든 추가하고 수정할 수 있습니다.</p></article>
             <article class="feature"><span>⌘</span><h2>연결되는 마인드맵</h2><p>중심의 나와 기술, 프로젝트, 경험이 하나의 흐름으로 이어집니다.</p></article>
             <article class="feature"><span>↗</span><h2>한눈에 보여주기</h2><p>텍스트 나열 대신 구조화된 화면으로 나의 강점을 더 선명하게 전달하세요.</p></article>
         </section>
-        <!-- 프로젝트 소개 PDF를 별도 탭에서 확인할 수 있는 외부 문서 링크입니다. -->
+        <!-- 프로젝트 소개 PDF와 개발자 소개 마인드맵으로 이동하는 링크 영역입니다. -->
         <div class="document-link">
             <a href="https://drive.google.com/file/d/125tQAG2_cHx5fKIMxwbGADB2ejBnp3mY/view?usp=sharing" target="_blank" rel="noopener noreferrer">진로활동 PDF 보기 ↗</a>
+            <a href="/dev-mindmap">개발자 소개 마인드맵 보기 ↗</a>
         </div>
     </main>
     <script>
-        // 테마 선택값을 브라우저에 저장해 페이지 이동 뒤에도 유지합니다.
-        // localStorage에 저장한 테마 설정을 현재 페이지에 적용합니다.
-        function applyTheme() {
-            const isDark = localStorage.getItem('portfolio-theme') === 'dark';
-            document.body.classList.toggle('dark', isDark);
-            document.getElementById('theme-switch').textContent = isDark ? '☀ 화이트' : '◐ 다크';
-        }
-        function toggleTheme() {
-            localStorage.setItem('portfolio-theme', document.body.classList.contains('dark') ? 'light' : 'dark');
-            applyTheme();
-        }
-        applyTheme();
         // 로그인 상태이면 일반 메뉴 대신 마이페이지·내 마인드맵·로그아웃 메뉴를 표시합니다.
         if (localStorage.getItem('access_token')) {
             // 로그인된 사용자는 마이페이지와 개인 마인드맵으로 바로 이동할 수 있습니다.
             const navigation = document.querySelector('nav');
             navigation.innerHTML = `
-                <button id="theme-switch" class="theme-switch" type="button" onclick="toggleTheme()"></button>
+                <button class="ghost" type="button" onclick="location.href='/dev-mindmap'">개발자 소개</button>
                 <button class="ghost" type="button" onclick="openMindMap()">내 마인드맵</button>
                 <button class="primary" type="button" onclick="location.href='/editor'">마이페이지</button>
                 <button class="ghost" type="button" onclick="logout()">로그아웃</button>`;
-            applyTheme();
         }
 
         function logout() {
